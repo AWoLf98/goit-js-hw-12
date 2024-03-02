@@ -9,24 +9,17 @@ export default class PixabayAPI {
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: 'true',
+      per_page: 14,
+      page: 0
     };
   }
-  searchImg(q) {
-    this.#params['q'] = q;
-    // axios.get('');
-    return fetch(
-      `https://pixabay.com/api/?${new URLSearchParams(this.#params)}`
-    )
-      .then(responce => {
-        if (!responce.ok) {
-          throw Error('Network response was is bad');
-        }
-        return responce.json();
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation: ', error);
-        return null;
-      }
-      );
+  async searchImg(q = '') {
+    if (q) {
+      this.#params['q'] = q;
+    }
+    this.#params.page += 1;
+    return await axios.get('https://pixabay.com/api/', {
+      params: this.#params,
+    });
   }
 }

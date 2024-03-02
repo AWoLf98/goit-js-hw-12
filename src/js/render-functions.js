@@ -27,7 +27,7 @@ export default class Render {
     }
     
     
-    gallery.innerHTML = objData.hits.reduce(
+    gallery.innerHTML += objData.hits.reduce(
       (accumulator, currentValue) => {
         return (
           accumulator +
@@ -73,9 +73,9 @@ export default class Render {
         );
       },
       ''
-      );
+      ) + '<li><button type="button">Load more</button></li>';
 
-      this.#lightbox.refresh();
+      // this.#lightbox.refresh();
     }
 
   toggleLoadingMsg() {

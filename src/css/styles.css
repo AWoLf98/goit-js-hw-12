@@ -74,6 +74,10 @@ button[type='button']  {
   background-color: #4e75ff;
 }
 
+button[type='button']  {
+ margin: 0 auto;
+}
+
 button[type='submit']:hover,
 button[type='submit']:focus,
 button[type='button']:hover,
@@ -85,6 +89,7 @@ button[type='button']:focus  {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
+  margin-bottom: 32px;
 }
 
 .gallery > li {
@@ -92,11 +97,11 @@ button[type='button']:focus  {
   border: 1px solid #808080;
 }
 
-.gallery > li:last-child {
+/* .gallery > li:last-child {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .gallery a {
   display: block;

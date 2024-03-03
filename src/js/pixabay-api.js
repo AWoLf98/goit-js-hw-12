@@ -9,15 +9,18 @@ export default class PixabayAPI {
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: 'true',
-      per_page: 14,
+      per_page: 15,
       page: 0
     };
   }
   async searchImg(q = '') {
-    if (q) {
+    if(q) {
       this.#params['q'] = q;
+      this.#params.page = 0;
     }
+
     this.#params.page += 1;
+    console.log(this.#params.page);
     return await axios.get('https://pixabay.com/api/', {
       params: this.#params,
     });

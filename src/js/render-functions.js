@@ -6,12 +6,10 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import '../css/msg-styles.css';
 
 export default class Render {
-  #loadingMsg;
   #selector;
   #lightbox;
 
-  constructor(loadingMsg = 'loader-section', selector = '.gallery') {
-    this.#loadingMsg = loadingMsg;
+  constructor(selector = '.gallery') {
     this.#selector = selector;
     this.#lightbox = new SimpleLightbox(`${this.#selector} a`);
   }
@@ -20,6 +18,7 @@ export default class Render {
     const gallery = document.querySelector(this.#selector);
 
     gallery.innerHTML = '';
+    console.log(objData);
     // у випадку помилки повертає null=false і завдяки || objData.total не перевірятиме одже помилки не буде
     if (!objData || !objData.total) {
       this.showErrorMsg();
@@ -73,14 +72,14 @@ export default class Render {
         );
       },
       ''
-      ) + '<li><button type="button">Load more</button></li>';
+      );
 
-      // this.#lightbox.refresh();
+      this.#lightbox.refresh();
     }
 
-  toggleLoadingMsg() {
+  toggleLoadingMsg(selector) {
     document
-      .querySelector(`.${this.#loadingMsg}`)
+      .querySelector(selector)
       .classList.toggle('visually-hidden');
   }
 

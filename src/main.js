@@ -15,20 +15,21 @@ searchImg.addEventListener('submit', event => {
     return;
   }
 
-  renderInst.toggleLoadingMsg();
+  renderInst.toggleLoadingMsg('.loader-section');
   pixabayInst.searchImg(searchTerm).then(responce => {
-    renderInst.toggleLoadingMsg();
+    renderInst.toggleLoadingMsg('.loader-section');
+    renderInst.toggleLoadingMsg('button[type="button"]')
     renderInst.showGalery(responce.data);
-    const loadingImg = document.querySelector('li button[type="button"]');
-    loadingImg.addEventListener(
-      'click', () =>
-      pixabayInst.searchImg().then(responce => {
-        renderInst.showGalery(responce.data);
-      })
-    );  
   });
 });
 
+const loadingImg = document.querySelector('button[type="button"]');
+loadingImg.addEventListener(
+  'click', () =>
+  pixabayInst.searchImg().then(responce => {
+    renderInst.showGalery(responce.data);
+  })
+); 
 
 // function loadMoreImg() {
 

@@ -1,11 +1,10 @@
-import Render from './js/render-functions.js';
-import PixabayAPI from './js/pixabay-api.js';
+import Render from './js/render-functions';
+import PixabayAPI from './js/pixabay-api';
 
 const renderInst = new Render();
 const pixabayInst = new PixabayAPI();
 
 const searchImg = document.querySelector('.form-search');
-
 
 searchImg.addEventListener('submit', event => {
   event.preventDefault();
@@ -15,22 +14,21 @@ searchImg.addEventListener('submit', event => {
     return;
   }
 
-  renderInst.toggleLoadingMsg('.loader-section');
+  renderInst.toggleLoadingMsg();
   pixabayInst.searchImg(searchTerm).then(responce => {
-    renderInst.toggleLoadingMsg('.loader-section');
-    renderInst.toggleLoadingMsg('button[type="button"]')
-    renderInst.showGalery(responce.data);
+    renderInst.toggleLoadingMsg();
+    renderInst.showGalery(responce.data, pixabayInst.page,  pixabayInst.per_page);
   });
 });
 
-const loadingImg = document.querySelector('button[type="button"]');
-loadingImg.addEventListener(
-  'click', () =>
+const loadButton = document.querySelector('button[type="button"]');
+loadButton.addEventListener('click', renderNextPage); 
+
+function renderNextPage() {
+  renderInst.toggleLoadingMsg();
   pixabayInst.searchImg().then(responce => {
-    renderInst.showGalery(responce.data);
+    renderInst.toggleLoadingMsg();
+    renderInst.showGalery(responce.data, pixabayInst.page, pixabayInst.per_page)
+    renderInst.scrollGallery();
   })
-); 
-
-// function loadMoreImg() {
-
-// }
+}

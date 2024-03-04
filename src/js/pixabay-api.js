@@ -13,6 +13,15 @@ export default class PixabayAPI {
       page: 0
     };
   }
+
+  get page() {
+    return this.#params.page;
+  }
+
+  get per_page() {
+    return this.#params.per_page;
+  }
+  
   async searchImg(q = '') {
     if(q) {
       this.#params['q'] = q;
@@ -20,7 +29,7 @@ export default class PixabayAPI {
     }
 
     this.#params.page += 1;
-    console.log(this.#params.page);
+    // console.log(this.#params.page);
     return await axios.get('https://pixabay.com/api/', {
       params: this.#params,
     });

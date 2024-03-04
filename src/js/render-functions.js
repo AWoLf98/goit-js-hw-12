@@ -6,81 +6,107 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import '../css/msg-styles.css';
 
 export default class Render {
-  #selector;
+  #selectorGallery;
   #lightbox;
+  #selectorLoadingMsg;
+  #selectorLoadButton;
+  #HIDDEN_CLASS;
 
-  constructor(selector = '.gallery') {
-    this.#selector = selector;
-    this.#lightbox = new SimpleLightbox(`${this.#selector} a`);
+  constructor(
+    selectorGallery = '.gallery',
+    selectorLoadingMsg = '.loader-section',
+    selectorLoadButton = 'button[type="button"]'
+  ) {
+    this.#selectorLoadingMsg = selectorLoadingMsg;
+    this.#lightbox = new SimpleLightbox(
+      `${(this.#selectorGallery = selectorGallery)} a`
+    );
+    this.#selectorLoadButton = selectorLoadButton;
+    this.#HIDDEN_CLASS = 'visually-hidden';
   }
 
-  showGalery(objData) {
-    const gallery = document.querySelector(this.#selector);
+  showGalery(objData, page, per_page) {
+    const gallery = document.querySelector(this.#selectorGallery);
+    const loadButton = document.querySelector(this.#selectorLoadButton);
 
-    gallery.innerHTML = '';
-    console.log(objData);
-    // у випадку помилки повертає null=false і завдяки || objData.total не перевірятиме одже помилки не буде
+    if (page === 1) {
+      gallery.innerHTML = '';
+    }
+
     if (!objData || !objData.total) {
       this.showErrorMsg();
+      loadButton.classList.add(this.#HIDDEN_CLASS);
       return;
     }
-    
-    
-    gallery.innerHTML += objData.hits.reduce(
-      (accumulator, currentValue) => {
-        return (
-          accumulator +
-          `<li>
-            <a href="${currentValue.largeImageURL}">
-              <img src="${currentValue.webformatURL}" alt="${currentValue.tags}"/>
-              </a>
-            <ul class="img-description">
-            <li>
-              <span data-header>
-                Likes
-              </span>
-              <span data-count>
-                ${currentValue.likes}
+
+    gallery.innerHTML += objData.hits.reduce((accumulator, currentValue) => {
+      return (
+        accumulator +
+        `<li>
+              <a href="${currentValue.largeImageURL}">
+                <img src="${currentValue.webformatURL}" alt="${currentValue.tags}"/>
+                </a>
+              <ul class="img-description">
+              <li>
+                <span data-header>
+                  Likes
                 </span>
-            </li>
-            <li>
-              <span data-header>
-              Views
-              </span>
-              <span data-count>
-              ${currentValue.views}
-              </span>
+                <span data-count>
+                  ${currentValue.likes}
+                  </span>
               </li>
               <li>
-              <span data-header>
-              Comments
-              </span>
-              <span data-count>
-              ${currentValue.comments}
-              </span>
+                <span data-header>
+                Views
+                </span>
+                <span data-count>
+                ${currentValue.views}
+                </span>
+                </li>
+                <li>
+                <span data-header>
+                Comments
+                </span>
+                <span data-count>
+                ${currentValue.comments}
+                </span>
+                </li>
+                <li>
+                <span data-header>
+                Downloads
+                </span>
+                <span data-count>
+                  ${currentValue.downloads}
+                </span>
               </li>
-              <li>
-              <span data-header>
-              Downloads
-              </span>
-              <span data-count>
-                ${currentValue.downloads}
-              </span>
-            </li>
-          </ul>
-        </li>`
-        );
-      },
-      ''
+            </ul>
+          </li>`
       );
+    }, '');
+    loadButton.classList.remove(this.#HIDDEN_CLASS);
+    this.#lightbox.refresh();
 
-      this.#lightbox.refresh();
+    if (objData.total - (page - 1) * per_page <= per_page) {
+      this.showErrorMsg(
+        "We're sorry, but you've reached the end of search results."
+      );
+      loadButton.classList.add(this.#HIDDEN_CLASS);
     }
+  }
 
-  toggleLoadingMsg(selector) {
+  scrollGallery() {0
+    const img = document.querySelector('li>a>img');
+    const rect = img.getBoundingClientRect();
+    scrollBy({
+      top: rect.height * 2,
+      behavior: 'smooth',
+    });
+  }
+
+  toggleLoadingMsg() {
     document
-      .querySelector(selector)
-      .classList.toggle('visually-hidden');
+      .querySelector(this.#selectorLoadingMsg)
+      .classList.toggle(this.#HIDDEN_CLASS);
   }
 
   showErrorMsg(

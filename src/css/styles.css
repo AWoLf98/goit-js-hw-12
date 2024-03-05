@@ -74,7 +74,8 @@ button[type='button']  {
   background-color: #4e75ff;
 }
 
-button[type='button']  {
+div button[type='button']  {
+  display: block;
  margin: 0 auto;
 }
 
